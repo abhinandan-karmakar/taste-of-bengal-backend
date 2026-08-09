@@ -1,0 +1,99 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+
+Table users {
+  id integer [primary key]
+  name varchar
+  email varchar unique
+  password varchar
+  phone varchar unique
+  role varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table addresses {
+  id integer [primary key]
+  user_id integer
+  address varchar
+  address_type varchar
+}
+
+Table categories {
+  id integer [primary key]
+  name varchar unique
+  description varchar
+  is_active boolean
+}
+
+Table products {
+  id integer [primary key]
+  name varchar
+  price integer
+  category_id integer
+  description varchar
+  image_url varchar
+  available_stock integer
+  is_active boolean //only active product should be visible to users
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table cart {
+  id integer [primary key]
+  user_id integer
+}
+
+Table cart_items {
+  id integer [primary key]
+  cart_id integer
+  product_id integer
+  quantity integer
+}
+
+Table orders {
+  id integer [primary key]
+  user_id integer
+  total_amount integer
+  order_status varchar 
+  /*"PLACED
+  CONFIRMED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED*/
+  ordered_at timestamp
+}
+
+Table order_items {
+  id integer [primary key]
+  order_id integer
+  product_id integer
+  quantity integer
+  price integer
+}
+
+//One user have multiple address [many to one]
+Ref: addresses.user_id > users.id 
+
+// Many product can have One Categoty [Many to One]
+Ref: products.category_id > categories.id 
+
+// One Cart can below to only one User [One to One]
+Ref: cart.user_id > users.id 
+
+// One cart have many cart items [Many to One]
+Ref: cart_items.cart_id > cart.id 
+
+// one product below to many cart item [Many to One]
+Ref: cart_items.product_id > products.id
+
+//One user multiple order [Many to one]
+Ref: orders.user_id > users.id
+
+// Many order item can belong to one order [Many to one]
+Ref: order_items.order_id > orders.id
+
+// Many order item can have one product [Many to One]
+Ref: order_items.product_id > products.id

@@ -1,0 +1,34 @@
+Authentication
+--------------
+**
+Endpoint: POST /api/v1/auth/register
+Authentication : Not required
+Method : POST
+Description : New user should register first of all
+Request body :
+{ 
+ name : String
+ email : String
+ password : String
+ phone : String
+}
+Success response : 
+201 (HttpStatus.CREATED) - User registered successfully
+Error : 
+400((HttpStatus.BAD_REQUEST) - Invalid input
+409 (HttpStatus.CONFLICT) - Email/Phone already exist
+
+**
+Endpoint : POST /api/v1/auth/login
+Authentication : Not required
+Method : POST
+Description : User should login first to use the application
+Request body :
+{ 
+ email : String
+ password : String
+}
+Success response : 
+200 (HttpStatus.OK) - { return TOKEN }
+Error : 
+401(HttpStatus.UNAUTHORIZED) - Invalid input

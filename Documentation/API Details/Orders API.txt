@@ -1,0 +1,88 @@
+Orders
+-------
+**
+Endpoint : POST /api/v1/orders
+Authentication : Required (User)
+Method : POST
+Description : it should handle in a transaction
+@Transactional
+1. Make sure cart is not empty.
+2. Fetch cart items.
+3. Fetch products.
+4. Validate every product is active.
+5. Validate requested quantity <= available stock.
+6. Calculate total.
+7. Create Order.
+8. Create OrderItems.
+9. Reduce product stock.
+10. Clear CartItems.
+11. Commit transaction.
+Request body : None
+Success Response : 201 (HttpStatus.CREATED) - Order successful.
+Error :
+400 BAD_REQUEST
+- Cart is empty / invalid request
+
+404 NOT_FOUND
+- Product no longer exists
+
+409 CONFLICT
+- Product is inactive
+- Insufficient stock
+
+500 INTERNAL_SERVER_ERROR
+- Unexpected server/database error
+
+**
+Endpoint : GET /api/v1/orders
+Authentication : Required (User)
+Method : GET
+Description : Return all orders of the user.
+Request body : None
+Success Response : 200 (HttpStatus.OK) - [list of orders in below format]
+[
+{
+ order_id : int
+ total_amount : int
+ order_status : String
+ ordered_at : timestamp
+ items : [
+	  {
+	  product_id : int
+ 	  product_name : String
+ 	  product_description : String
+   	  Product_image : String
+   	  price : int [from order_item table]
+	  quantity : int
+	  }, ...
+	 ]
+
+}, ...
+]
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : GET /api/v1/orders/{id}
+Authentication : Required (User)
+Method : GET
+Description : Return the order of the order_id
+Request body : None
+Success Response : 200 (HttpStatus.OK) - [Orders in below format]
+{
+ order_id : int
+ total_amount : int
+ order_status : String
+ ordered_at : timestamp
+ items : [
+	  {
+	  product_id : int
+ 	  product_name : String
+ 	  product_description : String
+   	  Product_image : String
+   	  price : int [from order_item table]
+	  quantity : int
+	  }, ...
+	 ]
+ 
+}
+Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR)

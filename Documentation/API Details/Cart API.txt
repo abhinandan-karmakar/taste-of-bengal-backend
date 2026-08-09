@@ -1,0 +1,62 @@
+Cart
+-----
+**
+Endpoint : GET /api/v1/cart
+Authentication : Required (User)
+Method : GET
+Description : Return cart items of the user
+Request body :None
+Success Response : 
+200 (HttpStatus.OK) - {List of all cart items in below format}
+[
+{
+  product_id : int
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  quantity : int
+
+}, ...
+]
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : POST /api/v1/cart/items
+Authentication : Required (User)
+Method : POST
+Description : Add item into cart. Need to make sure the product is already not added to cart
+Request body :
+{
+ product_id : int
+ quantity : int
+}
+Success Response : 
+200 (HttpStatus.OK) - Added to cart
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR) OR 409 (HttpStatus.CONFLICT)
+
+**
+Endpoint : PUT /api/v1/cart/items/{id}
+Authentication : Required (User)
+Method : PUT
+Description : Update the quantity of the cart item. Need to make sure the quantity is equal or less than available_stock
+Request body :
+{
+ quantity : int
+}
+Success Response : 200 (HttpStatus.OK) - Updated quantity successfully.
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : DELETE /api/v1/cart/items/{id}
+Authentication : Required (User)
+Method : DELETE
+Description : Delete the item from the cart means cart item table.
+Request body : None
+Success Response : 200 (HttpStatus.OK) - Removed from cart successfully.
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+
+
+

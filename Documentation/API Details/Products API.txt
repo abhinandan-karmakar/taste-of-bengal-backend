@@ -1,0 +1,157 @@
+Products
+---------
+**
+Endpoint : GET /api/v1/products
+Authentication : Not required
+Method : GET
+Description : Return list of all active products.
+Request body : None
+Success Response : 
+200 (HttpStatus.OK) - { List of products in below format. Only to send the active products }
+[{
+  id : int
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  available_stock : int
+}, ...
+]
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : GET /api/v1/products/{id}
+Authentication : Not required
+Method : GET
+Description : Return the product of that ID if the product is active.
+Request body : None
+Success Response :
+200 (HttpStatus.OK) - { Product details in the below format }
+{
+  id : int
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  available_stock : int
+}
+Error : 404 (HttpStatus.NOT_FOUND)
+
+**
+Endpoint : GET /api/v1/products/search?keyword="something"
+Authentication : Not required
+Method : GET
+Description : Return the active products if the description/name/category match with the search content
+Request body : None
+Success Response :
+200 (HttpStatus.OK) - { List of Products details in the below format }
+[{
+  id : int
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  available_stock : int
+}, ...
+]
+Error : 200 (HttpStatus.OK) - with empty list []
+
+**
+Endpoint : GET /api/v1/admin/products
+Authentication : Required (Admin)
+Method : GET
+Description : Return List of all products in below format irrespective of active and inactive
+Request body : None
+Success Response :
+200 (HttpStatus.OK) - { List of Products details in the below format }
+[{
+  id : int
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  available_stock : int
+  is_active : boolean
+  created_at : timestamp
+  updated_at : timestamp
+}, ...
+]
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : GET /api/v1/admin/products/{id}
+Authentication : Required (Admin)
+Method : GET
+Description : Return the product of that ID.
+Request body : None
+Success Response :
+200 (HttpStatus.OK) - { Product details in the below format }
+{
+  id : int
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  available_stock : int
+  is_active : boolean
+  created_at : timestamp
+  updated_at : timestamp
+}
+Error : 404 (HttpStatus.NOT_FOUND)
+
+**
+Endpoint : POST /api/v1/admin/products
+Authentication : Required (Admin)
+Method : POST
+Description : Create all the products
+Request body :
+[{
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  available_stock : int
+}, ...
+]
+Success Response : 201 (HttpStatus.CREATED) - Products created successfully
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+
+**
+Endpoint : PUT /api/v1/admin/products/{id}
+Authentication : Required (Admin)
+Method : PUT
+Description : Update the product of that ID.
+Request body : 
+{
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  available_stock : int
+  is_active : boolean
+}
+Success Response : 200 (HttpStatus.OK) - Details updated successfully
+Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : DELETE /api/v1/admin/products/{id}
+Authentication : Required (Admin)
+Method : DELETE
+Description : Make the product Is_active status to false.
+Request body : None
+Success Response : 200 (HttpStatus.OK) - Product delete successfully
+Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+
+
+
+
+

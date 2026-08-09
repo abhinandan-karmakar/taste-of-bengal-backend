@@ -1,0 +1,68 @@
+Categories
+-----------
+**
+Endpoint : GET /api/v1/categories
+Authentication : Not required
+Method : GET
+Description : Return all categories irrespective of active or inactive
+Request body :None
+Success Response : 
+200 (HttpStatus.OK) - {List of all categories in below format}
+[
+{
+ id :  int
+ name : String
+ description  String
+}, ...
+]
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : POST /api/v1/admin/categories
+Authentication : Required (Admin)
+Method : POST
+Description : Add the new category
+Request body :
+{
+name : String
+description : String
+}
+Success Response : 
+201 (HttpStatus.CREATED) - {Category deetail in below format}
+{
+ id :  int
+ name : String
+ description : String
+}
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : PUT /api/v1/admin/categories/{id}
+Authentication : Required (Admin)
+Method : PUT
+Description : Update the category of the id
+Request body :
+{
+ name : String
+ description : String
+}
+Success Response : 200 (HttpStatus.OK) - Updated the category successfully
+Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
+Endpoint : DELETE /api/v1/admin/categories/{id}
+Authentication : Required (Admin)
+Method : DELETE
+Description : Make the category is_active to false only if the category is not tagged to any products
+Request body : None
+Success Response : 200 (HttpStatus.OK) - Deleted the category successfully
+Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR) OR 409 (HttpStatus.CONFLICT)
+
+
+
+
+
+
+
+
+

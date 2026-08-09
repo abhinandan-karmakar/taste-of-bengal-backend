@@ -1,0 +1,49 @@
+About the application : This is a E-Commerce application for Snacks where customer can browse/search snacks and order. Where Admin can add, update and delete products from UI without touching the DB. In future, the shopkeepers can place bulk other from application.
+
+User feature:
+1. Register/ login
+2. Landed to Home page
+3. Search products
+4. Add to cart
+5. Increase items quantity in cart
+6. Delete items from cart
+7. Place order of the cart items.
+8. Can view the last orders.
+9. Update profile details like name, address. Not allowed to update phone and email
+10. Logout
+
+
+Admin feature:
+1. Login
+2. Dashboard (Visual representation of the store)
+3. Add product
+4. Modify product
+5. Delete product
+6. Add Category
+7. Modify Category
+8. Delete Category
+9. Logout
+
+
+Tables:
+1. Users
+2. Addresses
+3. Products
+4. Cart
+5. Cart item
+6. Orders
+7. Order item
+8. Categories
+
+
+Business Rules
+
+- Email must be unique.
+- Phone number must be unique.
+- A customer cannot order more than the available stock.
+- Product price cannot be negative.
+- Deleted products should not appear in search.
+- Only admins can manage products.
+- Customers can update only their name and address.
+- A cart belongs to exactly one user.
+- One order can contain multiple products.

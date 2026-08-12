@@ -38,12 +38,16 @@ public class AdminProductService {
 				product.getAvailableStock(), product.isActive(), product.getCreatedAt(), product.getUpdatedAt());
 	}
 
-	private Product mapToAdminProductRequest(Product product, AdminProductRequest productRequest) {
+	private Product mapFromAdminProductRequest(Product product, AdminProductRequest productRequest) {
 
-		Category category = categoryRepo.findByName(productRequest.getCategory());
+		Category category = categoryRepo.findByNameIgnoreCase(productRequest.getCategory());
 
 		if (category == null) {
 			throw new ResourceNotFoundException("No Category not found with name : " + productRequest.getCategory());
+		}
+
+		if (category.isActive() == false && productRequest.isActive() == true) {
+			throw new ConflictException("Product can not to active because the associated category is in-active");
 		}
 
 		product.setName(productRequest.getName());
@@ -75,7 +79,7 @@ public class AdminProductService {
 	}
 
 	public String addProduct(AdminProductRequest productRequest) {
-		Product product = mapToAdminProductRequest(new Product(), productRequest);
+		Product product = mapFromAdminProductRequest(new Product(), productRequest);
 		productRepo.save(product);
 		return "Product Created Successfully";
 	}
@@ -85,7 +89,8 @@ public class AdminProductService {
 			throw new ResourceNotFoundException("No product found with Id : " + id);
 		});
 
-		product = mapToAdminProductRequest(product, productRequest);
+
+		product = mapFromAdminProductRequest(product, productRequest);
 		productRepo.save(product);
 		return "Product Updated Successfully";
 	}

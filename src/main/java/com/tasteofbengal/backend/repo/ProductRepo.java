@@ -27,4 +27,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 			""")
 	List<Product> searchByKeyword(String keyword);
 
+	boolean existsByCategoryId(Integer id);
+
+	boolean existsByCategoryIdAndIsActiveTrue(Integer id);
 }

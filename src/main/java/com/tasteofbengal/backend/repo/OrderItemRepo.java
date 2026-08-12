@@ -8,4 +8,6 @@ import com.tasteofbengal.backend.model.OrderItem;
 @Repository
 public interface OrderItemRepo extends JpaRepository<OrderItem, Integer> {
 
+	boolean existsByProductId(Integer id);
+
 }

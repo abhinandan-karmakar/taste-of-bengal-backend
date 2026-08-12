@@ -8,4 +8,6 @@ import com.tasteofbengal.backend.model.Category;
 @Repository
 public interface CategoryRepo extends JpaRepository<Category, Integer> {
 
+	Category findByName(String name);
+
 }

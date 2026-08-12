@@ -8,4 +8,6 @@ import com.tasteofbengal.backend.model.CartItem;
 @Repository
 public interface CartItemRepo extends JpaRepository<CartItem, Integer> {
 
+	boolean existsByProductId(Integer id);
+
 }

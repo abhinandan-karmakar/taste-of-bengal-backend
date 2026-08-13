@@ -4,7 +4,7 @@ Categories
 Endpoint : GET /api/v1/categories
 Authentication : Not required
 Method : GET
-Description : Return all categories irrespective of active or inactive
+Description : Return all active categories
 Request body :None
 Success Response : 
 200 (HttpStatus.OK) - {List of all categories in below format}
@@ -18,6 +18,26 @@ Success Response :
 Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
 
 **
+Endpoint : GET /api/v1/admin/categories
+Authentication : Not required
+Method : GET
+Description : Return all categories irrespective of active or inactive
+Request body :None
+Success Response : 
+200 (HttpStatus.OK) - {List of all categories in below format}
+[
+{
+ id :  int
+ name : String
+ description : String
+ isActive : Boolean
+ createdAt : timestamp
+ updatedAt : timestamp
+}, ...
+]
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+**
 Endpoint : POST /api/v1/admin/categories
 Authentication : Required (Admin)
 Method : POST
@@ -26,37 +46,56 @@ Request body :
 {
 name : String
 description : String
+isActive : boolean
 }
-Success Response : 
-201 (HttpStatus.CREATED) - {Category deetail in below format}
-{
- id :  int
- name : String
- description : String
-}
-Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+Success Response : 201 (HttpStatus.CREATED) - Category created successfully.
+Error : 
+500 (HttpStatus.INTERNAL_SERVER_ERROR)
+-> Unexpected server/database error.
+
+409 (HttpStatus.CONFLICT)
+→ Category with the given name already exists.
+
 
 **
 Endpoint : PUT /api/v1/admin/categories/{id}
 Authentication : Required (Admin)
 Method : PUT
-Description : Update the category of the id
+Description : Update the category of the id.
+- can't update the name if already exist the same name.
+- can't change the active state to false if active product is associate with the category.
 Request body :
 {
  name : String
  description : String
+ isActive : boolean
 }
 Success Response : 200 (HttpStatus.OK) - Updated the category successfully
-Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+Error : 
+404 (HttpStatus.NOT_FOUND)
+→ Category with the specified ID does not exist.
+
+409 (HttpStatus.CONFLICT)
+→ Another category already exists with the requested name.
+
+500 (HttpStatus.INTERNAL_SERVER_ERROR)
+→ Unexpected server/database error.
 
 **
 Endpoint : DELETE /api/v1/admin/categories/{id}
 Authentication : Required (Admin)
 Method : DELETE
-Description : Make the category is_active to false only if the category is not tagged to any products
+Description : Delete the category if the category is not linked to any product.
 Request body : None
 Success Response : 200 (HttpStatus.OK) - Deleted the category successfully
-Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR) OR 409 (HttpStatus.CONFLICT)
+Error : 
+404 (HttpStatus.NOT_FOUND)
+→ Category with the specified ID does not exist.
+OR 
+500 (HttpStatus.INTERNAL_SERVER_ERROR)
+→ Unexpected server/database error.
+OR 409 (HttpStatus.CONFLICT)
+→ Product already linked with the category.
 
 
 

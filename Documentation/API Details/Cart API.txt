@@ -23,39 +23,61 @@ Success Response :
 Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
 
 **
-Endpoint : POST /api/v1/cart/items
+Endpoint : POST /api/v1/cart/items/{productId}
 Authentication : Required (User)
 Method : POST
-Description : Add item into cart. Need to make sure the product is already not added to cart
-Request body :
-{
- product_id : int
- quantity : int
-}
+Description : Add item into cart with quantity 1
+- Product should be in active state.
+- Product's available stock should be more than 0
+- product should not be already present in cart.
+Request body :None
 Success Response : 
 200 (HttpStatus.OK) - Added to cart
-Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR) OR 409 (HttpStatus.CONFLICT)
+Error : 
+500 (HttpStatus.INTERNAL_SERVER_ERROR)
+→ Unexpected server/database error.
+OR
+404 (HttpStatus.NOT_FOUND)
+→ Product with the specified ID does not exist.
+OR 
+409 (HttpStatus.CONFLICT)
+-> Product already present in cart.
+-> Product is out of stock
 
 **
-Endpoint : PUT /api/v1/cart/items/{id}
+Endpoint : PUT /api/v1/cart/items/{productId}
 Authentication : Required (User)
 Method : PUT
-Description : Update the quantity of the cart item. Need to make sure the quantity is equal or less than available_stock
+Description : Update the quantity of the cart item.
+- Product should be present in cart.
+- Quantity should equal or less than product's available_stock.
 Request body :
 {
- quantity : int
+    "quantity": 5
 }
 Success Response : 200 (HttpStatus.OK) - Updated quantity successfully.
-Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+Error : 
+500 (HttpStatus.INTERNAL_SERVER_ERROR)
+→ Unexpected server/database error.
+OR
+404 (HttpStatus.NOT_FOUND)
+→ Product with the specified ID does not exist in the cart.
+OR 
+409 (HttpStatus.CONFLICT)
+-> Requested quantity exceeds the available stock.
 
 **
-Endpoint : DELETE /api/v1/cart/items/{id}
+Endpoint : DELETE /api/v1/cart/items/{productId}
 Authentication : Required (User)
 Method : DELETE
 Description : Delete the item from the cart means cart item table.
 Request body : None
 Success Response : 200 (HttpStatus.OK) - Removed from cart successfully.
-Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+Error : 
+500 (HttpStatus.INTERNAL_SERVER_ERROR)
+OR
+404 (HttpStatus.NOT_FOUND)
+→ Product with the specified ID does not exist in the cart.
 
 
 

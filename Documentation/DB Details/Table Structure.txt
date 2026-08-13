@@ -24,7 +24,9 @@ Table categories {
   id integer [primary key]
   name varchar unique
   description varchar
-  is_active boolean
+  is_active Boolean
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table products {

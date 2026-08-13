@@ -1,6 +1,6 @@
 Products
 ---------
-**
+** 
 Endpoint : GET /api/v1/products
 Authentication : Not required
 Method : GET
@@ -20,7 +20,7 @@ Success Response :
 ]
 Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
 
-**
+** 
 Endpoint : GET /api/v1/products/{id}
 Authentication : Not required
 Method : GET
@@ -39,7 +39,7 @@ Success Response :
 }
 Error : 404 (HttpStatus.NOT_FOUND)
 
-**
+** 
 Endpoint : GET /api/v1/products/search?keyword="something"
 Authentication : Not required
 Method : GET
@@ -59,7 +59,7 @@ Success Response :
 ]
 Error : 200 (HttpStatus.OK) - with empty list []
 
-**
+** 
 Endpoint : GET /api/v1/admin/products
 Authentication : Required (Admin)
 Method : GET
@@ -82,7 +82,7 @@ Success Response :
 ]
 Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
 
-**
+** 	
 Endpoint : GET /api/v1/admin/products/{id}
 Authentication : Required (Admin)
 Method : GET
@@ -104,11 +104,11 @@ Success Response :
 }
 Error : 404 (HttpStatus.NOT_FOUND)
 
-**
+** 
 Endpoint : POST /api/v1/admin/products
 Authentication : Required (Admin)
 Method : POST
-Description : Create product
+Description : Create the product
 Request body :
 {
   name : String
@@ -117,9 +117,14 @@ Request body :
   description : String
   image_url : String
   available_stock : int
+  is_active : boolean
 }
 Success Response : 201 (HttpStatus.CREATED) - Products created successfully
-Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+Error : 
+500 (HttpStatus.INTERNAL_SERVER_ERROR) 
+OR 
+404 (HttpStatus.NOT_FOUND) 
+- Category not found
 
 
 **
@@ -127,6 +132,8 @@ Endpoint : PUT /api/v1/admin/products/{id}
 Authentication : Required (Admin)
 Method : PUT
 Description : Update the product of that ID.
+- The category should exist with the name
+- The category should not be in in-active state.
 Request body : 
 {
   name : String
@@ -144,10 +151,20 @@ Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR)
 Endpoint : DELETE /api/v1/admin/products/{id}
 Authentication : Required (Admin)
 Method : DELETE
-Description : Make the product Is_active status to false.
+Description : Permanently delete the product record if it is not associated
+with any CartItem or OrderItem.
 Request body : None
-Success Response : 200 (HttpStatus.OK) - Product delete successfully
-Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+Success Response : 200 (HttpStatus.OK) - Product deleted successfully
+Error : 
+404 NOT_FOUND
+Product not found
+
+409 CONFLICT
+Product cannot be deleted because it is associated
+with a cart or order.
+
+500 INTERNAL_SERVER_ERROR
+Unexpected server/database error
 
 
 

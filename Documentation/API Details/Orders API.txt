@@ -50,6 +50,7 @@ Success Response : 200 (HttpStatus.OK) - [list of orders in below format]
 	  {
 	  product_id : int
  	  product_name : String
+	  product_category : String
  	  product_description : String
    	  Product_image : String
    	  price : int [from order_item table]
@@ -73,7 +74,7 @@ Success Response : 200 (HttpStatus.OK) - [Orders in below format]
  total_amount : int
  order_status : String
  ordered_at : timestamp
- items : [
+ items : 
 	  {
 	  product_id : int
  	  product_name : String
@@ -82,7 +83,7 @@ Success Response : 200 (HttpStatus.OK) - [Orders in below format]
    	  price : int [from order_item table]
 	  quantity : int
 	  }, ...
-	 ]
+	 
  
 }
 Error : 404 (HttpStatus.NOT_FOUND) OR 500 (HttpStatus.INTERNAL_SERVER_ERROR)

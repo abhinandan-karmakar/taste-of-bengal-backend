@@ -11,12 +11,12 @@ Success Response :
 [
 {
   product_id : int
-  name : String
-  price : int
-  category : String
-  description : String
-  image_url : String
-  quantity : int
+  product_name : String
+  product_price : int
+  product_category : String
+  product_description : String
+  product_image_url : String
+  product_quantity : int
 
 }, ...
 ]
@@ -49,6 +49,7 @@ Endpoint : PUT /api/v1/cart/items/{productId}
 Authentication : Required (User)
 Method : PUT
 Description : Update the quantity of the cart item.
+- Quantity should be more than 0
 - Product should be present in cart.
 - Quantity should equal or less than product's available_stock.
 Request body :

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.tasteofbengal.backend.enums.OrderStatus;
 import com.tasteofbengal.backend.user.User;
 
 import jakarta.persistence.Column;
@@ -36,7 +35,7 @@ public class Order {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private OrderStatus orderStatus = OrderStatus.PLACED;
+	private OrderStatus orderStatus = OrderStatus.PAYMENT_PENDING;
 
 	@CreationTimestamp
 	@Column(nullable = false, updatable = false)

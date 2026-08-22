@@ -32,3 +32,25 @@ Success response :
 200 (HttpStatus.OK) - { return TOKEN }
 Error : 
 401(HttpStatus.UNAUTHORIZED) - Invalid input
+
+**
+Endpoint : POST /api/v1/auth/refresh
+Authentication : not required
+Method : POST
+Description : Fetch the refresh token from cookie and generate a new access and refresh token and invalid the old refresh token.
+Request body : None
+Success response : 
+200 (HttpStatus.OK) - { return TOKEN }
+Error : 
+Spring security error/exception.
+
+**
+Endpoint : POST /api/v1/auth/logout
+Authentication : not required
+Method : POST
+Description : Invalid the refresh token.
+Request body :None
+Success response : 
+200 (HttpStatus.OK) - { return TOKEN }
+Error : 
+Spring Security Error/ Exception.

@@ -1,10 +1,15 @@
 package com.tasteofbengal.backend.product;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import jakarta.persistence.LockModeType;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer> {
@@ -28,4 +33,8 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 	boolean existsByCategoryId(Integer id);
 
 	boolean existsByCategoryIdAndIsActiveTrue(Integer id);
+
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("SELECT p FROM Product p WHERE p.id = :id")
+	Optional<Product> findByIdForUpdate(@Param("id") Integer id);
 }

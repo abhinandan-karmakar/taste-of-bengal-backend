@@ -7,7 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.tasteofbengal.backend.cart.Cart;
-import com.tasteofbengal.backend.enums.Role;
 import com.tasteofbengal.backend.order.Order;
 
 import jakarta.persistence.Column;

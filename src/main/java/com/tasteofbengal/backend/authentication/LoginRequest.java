@@ -1,15 +1,15 @@
 package com.tasteofbengal.backend.authentication;
 
-public class LoginUserRequest {
+public class LoginRequest {
 	private String email;
 
 	private String password;
 
-	public LoginUserRequest() {
+	public LoginRequest() {
 		super();
 	}
 
-	public LoginUserRequest(String email, String password) {
+	public LoginRequest(String email, String password) {
 		super();
 		this.email = email;
 		this.password = password;

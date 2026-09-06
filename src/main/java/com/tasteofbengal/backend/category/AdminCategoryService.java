@@ -105,4 +105,14 @@ public class AdminCategoryService {
 		return "Category deleted successfully";
 	}
 
+	public AdminCategoryResponse getCategoryById(Integer id) {
+
+		Category category = categoryRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("No Category found with the id : " + id));
+
+		AdminCategoryResponse adminCategoryResponse = mapToCategoryResponse(category);
+
+		return adminCategoryResponse;
+	}
+
 }

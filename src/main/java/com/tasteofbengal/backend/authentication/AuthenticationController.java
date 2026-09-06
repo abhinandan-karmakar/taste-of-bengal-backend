@@ -29,10 +29,19 @@ public class AuthenticationController {
 	@Autowired
 	private RefreshTokenService refreshTokenService;
 
+	@Autowired
+	private ForgetPasswordService forgetPasswordService;
+
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody RegisterUserRequest userRequest) {
 
 		return ResponseEntity.status(HttpStatus.OK).body(authenticationService.registerUser(userRequest));
+	}
+
+	@PostMapping("/verify-email")
+	public ResponseEntity<String> verifyEmail(@RequestBody VerifyEmailOtpRequest request) {
+
+		return ResponseEntity.status(HttpStatus.OK).body(authenticationService.verifyEmailOtp(request));
 	}
 
 	@PostMapping("/login")
@@ -75,6 +84,23 @@ public class AuthenticationController {
 		response.setRefreshToken(null);
 
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, refreshCookie.toString()).body(response);
+	}
+
+	@PostMapping("/forget-password")
+	public ResponseEntity<String> forgetPassword(@RequestBody ForgetPasswordRequest forgetPasswordRequest) {
+		return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordService.generateOtp(forgetPasswordRequest));
+	}
+
+	@PostMapping("/verify-forget-password-otp")
+	public ResponseEntity<ForgetPasswordTokenResponse> verifyForgetPasswordOtp(
+			@RequestBody VerifyEmailOtpRequest emailOtpRequest) {
+		return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordService.verifyEmailOtp(emailOtpRequest));
+	}
+
+	@PostMapping("/new-password")
+	public ResponseEntity<String> setNewPassword(@RequestBody NewPasswordRequest newPasswordRequest) {
+
+		return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordService.setNewPassword(newPasswordRequest));
 	}
 
 }

@@ -28,6 +28,11 @@ public class AdminCategoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(adminCategoryService.getAllCategories());
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<AdminCategoryResponse> getCategoryById(@PathVariable Integer id) {
+		return ResponseEntity.status(HttpStatus.OK).body(adminCategoryService.getCategoryById(id));
+	}
+
 	@PostMapping("")
 	public ResponseEntity<String> addCategory(@RequestBody AdminCategoryRequest categoryRequest) {
 

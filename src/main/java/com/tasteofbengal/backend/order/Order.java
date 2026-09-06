@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.tasteofbengal.backend.address.Address;
 import com.tasteofbengal.backend.user.User;
 
 import jakarta.persistence.Column;
@@ -40,6 +41,10 @@ public class Order {
 	@CreationTimestamp
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime orderedAt;
+
+	@ManyToOne
+	@JoinColumn(name = "address_id")
+	private Address address;
 
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> orderItems;
@@ -94,6 +99,14 @@ public class Order {
 
 	public void setOrderItems(List<OrderItem> orderItems) {
 		this.orderItems = orderItems;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 }

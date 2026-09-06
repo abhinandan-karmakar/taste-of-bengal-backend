@@ -51,4 +51,16 @@ public class ProductService {
 				product.getAvailableStock());
 	}
 
+	public List<ProductResponse> getAllProductsByCategory(Integer categoryId) {
+
+		List<Product> products = productRepo.findByCategoryId(categoryId);
+
+		List<ProductResponse> productResponses = new ArrayList<>();
+		for (Product product : products) {
+			productResponses.add(mapToProductResponse(product));
+		}
+
+		return productResponses;
+	}
+
 }

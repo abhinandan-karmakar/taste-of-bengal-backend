@@ -3,6 +3,7 @@ package com.tasteofbengal.backend.product;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,11 @@ public class ProductController {
 	public ResponseEntity<List<ProductResponse>> searchProducts(@RequestParam String keyword) {
 
 		return ResponseEntity.ok(productService.searchProducts(keyword));
+	}
+
+	@GetMapping("/search/{categoryId}")
+	public ResponseEntity<List<ProductResponse>> getAllProductsByCategory(@PathVariable Integer categoryId) {
+		return ResponseEntity.status(HttpStatus.OK).body(productService.getAllProductsByCategory(categoryId));
 	}
 
 }

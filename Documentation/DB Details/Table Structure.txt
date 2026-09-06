@@ -16,7 +16,12 @@ Table users {
 Table addresses {
   id integer [primary key]
   user_id integer
-  address varchar
+  house_no varchar
+  address_main varchar
+  landmark varchar
+  city varchar
+  state varchar
+  pincode varchar
   address_type varchar
 }
 

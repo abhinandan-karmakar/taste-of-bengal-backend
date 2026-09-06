@@ -34,6 +34,16 @@ public class AdminProductController {
 		return ResponseEntity.status(HttpStatus.OK).body(adminProductService.getProductById(id));
 	}
 
+	@GetMapping("/count-total")
+	public ResponseEntity<ProductCountResponse> getTotalProductCount() {
+		return ResponseEntity.status(HttpStatus.OK).body(adminProductService.getTotalProductCount());
+	}
+
+	@GetMapping("/count-active")
+	public ResponseEntity<ProductCountResponse> getActiveProductCount() {
+		return ResponseEntity.status(HttpStatus.OK).body(adminProductService.getActiveProductCount());
+	}
+
 	@PostMapping("")
 	public ResponseEntity<String> addProduct(@RequestBody AdminProductRequest productRequest) {
 

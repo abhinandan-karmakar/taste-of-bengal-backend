@@ -16,6 +16,8 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
 	List<Product> findByIsActiveTrue();
 
+	List<Product> findByCategoryId(Integer categoryId);
+
 	@Query("""
 			    SELECT p
 			    FROM Product p
@@ -37,4 +39,6 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("SELECT p FROM Product p WHERE p.id = :id")
 	Optional<Product> findByIdForUpdate(@Param("id") Integer id);
+
+	long countByIsActiveTrue();
 }

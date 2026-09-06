@@ -1,0 +1,61 @@
+Address
+
+***
+Endpoint : GET /api/v1/address
+Authentication : Required (User)
+Method : GET
+Description : Return all active address of the user.
+Request body : None
+Success Response : 200 (HttpStatus.OK) - [Address in below format]
+[
+{
+  userId : Integer,
+  addressName : String,
+  houseNo : String,
+  addressMain : String,
+  landmark : String,
+  city : String,
+  state : String,
+  pincode : String,
+  addressType : String
+}, ...
+]
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+***
+
+Endpoint : POST /api/v1/address
+Authentication : Required (User)
+Method : POST
+Description : Save the address associated with the user.
+Request body : [If the address name is null then mention the username there.]
+{
+  addressName : String
+  houseNo : String,
+  addressMain : String,
+  landmark : String,
+  city : String,
+  state : String,
+  pincode : String,
+  addressType : String
+}
+Success Response : 200 (HttpStatus.OK) - "Saved address successfully"
+
+Error : 500 (HttpStatus.INTERNAL_SERVER_ERROR)
+
+***
+
+Endpoint : DELETE /api/v1/address/{id}
+Authentication : Required (User)
+Method : DELETE
+Description : Make the isActive status to false of the address, if the address belong to the user.
+
+Request body : None
+
+Success Response : 200 (HttpStatus.OK) - Address Deleted successfully
+
+Error : 
+500 (HttpStatus.INTERNAL_SERVER_ERROR)
+OR
+404 (HttpState.Not_found) : Address not found
+

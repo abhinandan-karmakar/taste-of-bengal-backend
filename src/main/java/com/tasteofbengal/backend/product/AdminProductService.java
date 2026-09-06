@@ -110,4 +110,18 @@ public class AdminProductService {
 		return "Product deleted successfully";
 	}
 
+	public ProductCountResponse getTotalProductCount() {
+
+		long count = productRepo.count();
+
+		return new ProductCountResponse(count);
+	}
+
+	public ProductCountResponse getActiveProductCount() {
+
+		long countActive = productRepo.countByIsActiveTrue();
+
+		return new ProductCountResponse(countActive);
+	}
+
 }

@@ -60,6 +60,27 @@ Success Response :
 Error : 200 (HttpStatus.OK) - with empty list []
 
 ** 
+Endpoint : GET /api/v1/products/search/{categoryId}
+Authentication : Not required
+Method : GET
+Description : Return the active products associated with the category
+Request body : None
+Success Response :
+200 (HttpStatus.OK) - { List of Products details in the below format }
+[{
+  id : int
+  name : String
+  price : int
+  category : String
+  description : String
+  image_url : String
+  available_stock : int
+}, ...
+]
+Error : 200 (HttpStatus.OK) - with empty list []
+
+
+** 
 Endpoint : GET /api/v1/admin/products
 Authentication : Required (Admin)
 Method : GET

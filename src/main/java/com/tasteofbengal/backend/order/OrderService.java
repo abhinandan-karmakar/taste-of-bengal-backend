@@ -1,12 +1,16 @@
 package com.tasteofbengal.backend.order;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tasteofbengal.backend.address.Address;
+import com.tasteofbengal.backend.address.AddressRepo;
 import com.tasteofbengal.backend.cart.Cart;
 import com.tasteofbengal.backend.cart.CartItem;
 import com.tasteofbengal.backend.cart.CartItemRepo;
@@ -48,6 +52,9 @@ public class OrderService {
 	private OrderItemRepo orderItemRepo;
 
 	@Autowired
+	private AddressRepo addressRepo;
+
+	@Autowired
 	private SecurityUtil securityUtil;
 
 	private Cart getCart() {
@@ -64,7 +71,15 @@ public class OrderService {
 	}
 
 	@Transactional
-	public OrderPaymentResponse createOrder() {
+	public OrderPaymentResponse createOrder(OrderRequest orderRequest) {
+		
+		Address address = addressRepo.findById(orderRequest.getAddressId())
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"Address does not exsist with id : " + orderRequest.getAddressId()));
+
+		if (address.getUser().getId() != securityUtil.getCurrentUserId()) {
+			throw new BadRequestException("Address does not exist");
+		}
 
 		Cart cart = getCart();
 
@@ -97,6 +112,7 @@ public class OrderService {
 		Order order = new Order();
 		order.setUser(cart.getUser());
 		order.setTotalAmount(total);
+		order.setAddress(address);
 		Order newOrder = orderRepo.save(order);
 
 		int amountInPaise = total * 100;
@@ -129,7 +145,8 @@ public class OrderService {
 	public List<OrderResponse> getAllOrders() {
 
 		Integer userId = securityUtil.getCurrentUserId();
-		List<Order> orders = orderRepo.findByUserId(userId);
+		List<Order> orders = orderRepo.findByUserIdAndOrderStatusInOrderByOrderedAtDesc(userId,
+				List.of(OrderStatus.PAID, OrderStatus.CASH_ON_DELIVERY, OrderStatus.CANCELLED));
 
 		List<OrderResponse> response = new ArrayList<>();
 
@@ -145,13 +162,109 @@ public class OrderService {
 		Order order = orderRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("No order found with id : " + id));
 
-		if (order.getUser().getId().equals(securityUtil.getCurrentUserId())) {
+		if (!order.getUser().getId().equals(securityUtil.getCurrentUserId())) {
 			throw new ResourceNotFoundException("No order found with id : " + id);
+		}
+
+		if (!(order.getOrderStatus().equals(OrderStatus.PAID)
+				|| order.getOrderStatus().equals(OrderStatus.CASH_ON_DELIVERY)
+				|| order.getOrderStatus().equals(OrderStatus.CANCELLED))) {
+			throw new ResourceNotFoundException("No Order found with id : " + id);
 		}
 
 		List<OrderItem> items = orderItemRepo.findByOrderId(order.getId());
 
 		return mapToOrderResponse(order, items);
+	}
+
+	@Transactional
+	public String createOrderOfCOD(OrderRequest orderRequest) {
+		Address address = addressRepo.findById(orderRequest.getAddressId())
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"Address does not exsist with id : " + orderRequest.getAddressId()));
+
+		if (address.getUser().getId() != securityUtil.getCurrentUserId()) {
+			throw new BadRequestException("Address does not exist");
+		}
+
+		Cart cart = getCart();
+
+		List<CartItem> cartItems = cartItemRepo.findByCartId(cart.getId());
+
+		if (cartItems.isEmpty()) {
+			throw new BadRequestException("Cart is empty, can't place an order");
+		}
+
+		int total = 0;
+		Map<Integer, Product> products = new HashMap<>();
+
+		for (CartItem cartItem : cartItems) {
+
+			Product product = productRepo.findByIdForUpdate(cartItem.getProduct().getId())
+					.orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+			if (!product.isActive()) {
+				throw new ConflictException("Product is inactive");
+			}
+
+			if (product.getAvailableStock() < cartItem.getQuantity()) {
+				throw new ConflictException("Product is having only stock of : " + product.getAvailableStock());
+			}
+
+			total += product.getPrice() * cartItem.getQuantity();
+
+			products.put(product.getId(), product);
+
+		}
+
+		Order order = new Order();
+		order.setUser(cart.getUser());
+		order.setTotalAmount(total);
+		order.setAddress(address);
+		order.setOrderStatus(OrderStatus.CASH_ON_DELIVERY);
+		Order newOrder = orderRepo.save(order);
+
+		for (CartItem cartItem : cartItems) {
+			Product product = products.get(cartItem.getProduct().getId());
+
+			product.setAvailableStock(product.getAvailableStock() - cartItem.getQuantity());
+
+			productRepo.save(product);
+
+			OrderItem orderItem = new OrderItem();
+
+			orderItem.setOrder(order);
+			orderItem.setProduct(product);
+			orderItem.setQuantity(cartItem.getQuantity());
+			orderItem.setPrice(product.getPrice());
+
+			orderItemRepo.save(orderItem);
+
+			cartItemRepo.delete(cartItem);
+		}
+
+		return "Order Successful";
+	}
+
+	public String cancelOrder(Integer id) {
+
+		Order order = orderRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("No order found with id : " + id));
+
+		Integer userId = securityUtil.getCurrentUserId();
+
+		if (userId != order.getUser().getId()) {
+			throw new ResourceNotFoundException("No Order found with the id : " + id);
+		}
+
+		if (order.getOrderStatus().equals(OrderStatus.CANCELLED)) {
+			throw new ConflictException("Order is alreadt cancelled");
+		}
+
+		order.setOrderStatus(OrderStatus.CANCELLED);
+		orderRepo.save(order);
+
+		return "Order cancelled successfully";
 	}
 
 }

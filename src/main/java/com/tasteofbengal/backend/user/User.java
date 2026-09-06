@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.tasteofbengal.backend.address.Address;
 import com.tasteofbengal.backend.cart.Cart;
 import com.tasteofbengal.backend.order.Order;
 

@@ -32,5 +32,18 @@ build/
 ### VS Code ###
 .vscode/
 
-### Environment variables ###
+# Local environment and backup files
+
 .env
+
+.env.local-backup
+
+
+# Database backup
+
+tasteofbengal_backup.sql
+
+
+# AWS RDS certificate bundle
+
+global-bundle.pem

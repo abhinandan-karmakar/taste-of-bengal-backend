@@ -1,0 +1,39 @@
+name: Deploy Taste of Bengal Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build application
+        run: mvn clean package -DskipTests
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/taste-of-bengal-backend
+            git pull origin main
+            docker stop taste-of-bengal-backend || true
+            docker rm taste-of-bengal-backend || true
+            docker build -t taste-of-bengal-backend .
+            docker run -d --name taste-of-bengal-backend --env-file .env -p 8080:8080 taste-of-bengal-backend
